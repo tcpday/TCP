@@ -1,17 +1,5 @@
-const { parseRequest } = require('./lib/app');
+const { parseRequest, makeHTTPPacket } = require('./lib/app');
 const { createServer } = require('net');
-
-
-const makeHTTPPacket = (data, contentType) => {
-  return `HTTP/1.1 200 OK
-  Date: ${new Date()};
-  Server: Apache
-  Accept-Ranges: bytes
-  Content-Type: ${contentType}
-
-  ${data}`;
-};
-
 
 const server = createServer(sock => {
   console.log('browser connected');
@@ -19,9 +7,12 @@ const server = createServer(sock => {
     const req = parseRequest(data);
     console.log('req', req);
     if(req.method === 'GET' && req.path === '/') {
-      sock.write('hello');
-      console.log('within if');
+      sock.write(makeHTTPPacket('hi', 'text/text'));
+    } else if(req.method === 'GET' && req.path === '/red') {
+      sock.write(makeHTTPPacket('red', 'text/html'));
     }
+     
+    sock.end();
   });
 
 });

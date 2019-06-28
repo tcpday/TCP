@@ -1,4 +1,4 @@
-const { makeHTTPPacket } = require('../index');
+const { makeHTTPPacket } = require('../lib/app');
 
 describe('makehttppacket', () => {
   it('will make a header', () => {
