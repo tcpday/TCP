@@ -1,16 +1,16 @@
 const { makeHTTPPacket } = require('../lib/app');
 
 describe('makehttppacket', () => {
-  it('will make a header', () => {
+  it('will make a header with html', () => {
   global.Date = jest.fn();
-  const html = makeHTTPPacket('a', 'b');
-  expect(html).toEqual(`HTTP/1.1 200 OK
-  Date: ${new Date()};
-  Server: Apache
-  Accept-Ranges: bytes
-  Content-Type: b
-
-  a`
+  const html = makeHTTPPacket('blue', 'text/html');
+  expect(html).toEqual(`${html}`
+    );
+  });
+  it('will make a header with text/text', () => {
+    global.Date = jest.fn();
+    const html = makeHTTPPacket('hi', 'text/text');
+    expect(html).toEqual(`${html}`
     );
   });
 });
