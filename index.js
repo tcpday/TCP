@@ -3,14 +3,9 @@ const { createServer } = require('net');
 
 const server = createServer(sock => {
   console.log('browser connected');
-  
   sock.on('data', data => {
-    
-    console.log(data.toString());
     parseRequest(data);
-    console.log(parseRequest());
-    
-  
+    console.log('parse', parseRequest(data));
   });
 
 });
