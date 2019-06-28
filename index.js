@@ -4,7 +4,7 @@ const { createServer } = require('net');
 
 const makeHTTPPacket = (data, contentType) => {
   return `HTTP/1.1 200 OK
-  Date: new Date();
+  Date: ${new Date()};
   Server: Apache
   Accept-Ranges: bytes
   Content-Type: ${contentType}
@@ -28,3 +28,5 @@ const server = createServer(sock => {
 
 
 server.listen(7880);
+
+module.exports = { makeHTTPPacket };
