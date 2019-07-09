@@ -10,17 +10,25 @@ const bar = {
 
 const jsonBar = JSON.stringify(bar);
 
+const router = {
+  POST: {
+    '/': makeTextOnlyPacket('Sorry!', 'text/plain')
+  },
+  GET: {
+    '/': makeTextOnlyPacket('hi', 'text/plain'),
+    '/red': makeHTTPPacket('red', 'text/html'),
+    '/blue': makeHTTPPacket('blue', 'text/html'),
+    '/green': makeHTTPPacket('green', 'text/html'),
+    '/bar': makeTextOnlyPacket(jsonBar, 'application/json')
+  }
+};
+
 const server = createServer(sock => {
   sock.on('data', data => {
     const req = parseRequest(data);
-    
-    req.method === 'GET' && req.path === '/' ? sock.write(makeTextOnlyPacket('hi', 'text/plain'))
-      : req.method === 'POST' && req.path === '/' ? sock.write(makeTextOnlyPacket('Sorry!', 'text/plain'))
-        : req.method === 'GET' && req.path === '/red' ? sock.write(makeHTTPPacket('red', 'text/html'))
-          : req.method === 'GET' && req.path === '/blue' ? sock.write(makeHTTPPacket('blue', 'text/html'))
-            : req.method === 'GET' && req.path === '/blue' ? sock.write(makeHTTPPacket('green', 'text/html'))
-              : req.method === 'GET' && req.path === '/bar' ? sock.write(makeTextOnlyPacket(jsonBar, 'application/json'))
-                : sock.write(makeHTTPPacket('404 NOT FOUND', 'text/html', '404 Not Found'));
+    const res = router[req.method][req.path] || makeHTTPPacket('404 NOT FOUND', 'text/html', '404 Not Found');
+  
+    sock.write(res);
 
     sock.end();
     
